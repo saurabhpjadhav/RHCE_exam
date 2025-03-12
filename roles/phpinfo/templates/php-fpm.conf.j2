@@ -1,0 +1,21 @@
+;;;;;;;;;;;;;;;;;;;;;
+; FPM Configuration ;
+;;;;;;;;;;;;;;;;;;;;;
+
+include={{ php_fpm_conf_path }}/pool.d/*.conf
+
+;;;;;;;;;;;;;;;;;;
+; Global Options ;
+;;;;;;;;;;;;;;;;;;
+{% if php_fpm_globals is defined and php_fpm_globals is mapping  %}
+
+    {% for item in (php_fpm_globals | dict2items) %}
+
+{{ item.key }}={{ item.value }}
+
+    {% endfor %}
+
+{% endif %}
+
+[global]
+error_log = /var/log/php-fpm.log

@@ -1,0 +1,31 @@
+---
+# tasks file for apache
+- name: Install http and firewalld
+  ansible.builtin.dnf:
+    name:
+      - httpd
+      - firewalld
+    state: present
+
+- name: Start service httpd, if not started
+  ansible.builtin.service:
+    name: httpd
+    state: started
+
+- name: Start service httpd, if not started
+  ansible.builtin.service:
+    name: firewalld
+    state: started
+
+- name: permit traffic in default zone for https service
+  ansible.posix.firewalld:
+    service: http
+    permanent: true
+    state: enabled
+    immediate: true
+
+- name: Template a file to /etc/file.conf
+  ansible.builtin.template:
+    src: template.j2
+    dest: /var/www/html/index.html
+

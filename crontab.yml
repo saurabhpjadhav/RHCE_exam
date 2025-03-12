@@ -1,0 +1,10 @@
+---
+- name: crontab.yml
+  hosts: all
+  tasks:
+    - name: Logger_job
+      ansible.builtin.cron:
+        name: logger
+        minute: "*/2"
+        user: student
+        job: logger “EX294 in progress”

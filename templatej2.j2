@@ -1,0 +1,7 @@
+HOSTNAME= {{ ansible_hostname }}
+MEMORY= {{ ansible_memtotal_mb }}
+BIOS= {{ ansible_bios_version }}
+CPU= {{ ansible_processor }}
+DISK_SIZE_VDA= {{ ansible_devices.vda.size | default ('NONE') }}
+DISK_SIZE_VDB= 'NONE'
+

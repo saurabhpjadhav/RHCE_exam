@@ -1,0 +1,61 @@
+---
+- name: webcontent
+  hosts: dev
+  tasks:
+    - name: Install the httpd and firewalld
+      ansible.builtin.dnf:
+        name:
+          - httpd
+          - firewalld
+        state: present
+
+    - name: Start service httpd, if not started
+      ansible.builtin.service:
+        name: httpd
+        state: started
+        enabled: yes
+
+    - name: Start service httpd, if not started
+      ansible.builtin.service:
+        name: firewalld
+        state: started
+        enabled: yes
+
+
+    - name: permit traffic in default zone for https service
+      ansible.posix.firewalld:
+        service: http
+        permanent: true
+        state: enabled
+        immediate: true
+
+    - name: Create a directory if it does not exist
+      ansible.builtin.file:
+        path: /devweb
+        state: directory
+        mode: "2775"
+        group: apache
+        setype: httpd_sys_content_t
+
+    - name: Touch a file 
+      ansible.builtin.file:
+        path: /devweb/index.html
+        state: touch
+        setype: httpd_sys_content_t
+
+
+    - name: Copy using inline content
+      ansible.builtin.copy:
+        content: 'Deployment'
+        dest: /devweb/index.html
+
+
+    - name: Create a symbolic link
+      ansible.builtin.file:
+        src: /devweb
+        dest: /var/www/html/devweb
+        state: link
+
+
+
+

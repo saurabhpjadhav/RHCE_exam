@@ -1,0 +1,43 @@
+---
+- name: users.yml
+  hosts: dev,test
+  vars_files:
+    - user_list.yml
+    - vault.yml
+  tasks:
+    - name: Ensure group "opsdev" exists
+      ansible.builtin.group:
+        name: opsdev
+        state: present
+
+    - name: Add Dev user
+      ansible.builtin.user:
+        name: "{{ item.name }}"
+        groups: opsdev
+        append: true
+        password: "{{ pw_developer | password_hash('sha512') }}"
+        password_expire_max: "{{ item.password_expire_days }}"
+      loop: "{{ myusers }}"
+      when: item.job == "developer"
+
+- name: users.yml 
+  hosts: test 
+  vars_files:     
+    - user_list.yml                
+    - vault.yml   
+  tasks:          
+    - name: Ensure group "opsmgr" exists                      
+      ansible.builtin.group:   
+        name: opsmgr               
+        state: present             
+                  
+    - name: Add Dev user           
+      ansible.builtin.user:        
+        name: "{{ item.name }}"    
+        groups: opsmgr             
+        append: true               
+        password: "{{ pw_manager | password_hash('sha512') }}"
+        password_expire_max: "{{ item.password_expire_days }}"
+      loop: "{{ myusers }}"        
+      when: item.job == "manager"
+

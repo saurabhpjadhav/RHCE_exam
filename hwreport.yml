@@ -1,0 +1,16 @@
+---
+- name: hwreport
+  hosts: all
+  tasks:
+    - block:
+        - name: Template a file to /etc/file.conf
+          ansible.builtin.template:
+            src: templatej1.j2
+            dest: /root/hwreport.j2
+
+
+      rescue:
+        - name: Template a file to /etc/file.conf
+          ansible.builtin.template:
+            src: templatej2.j2
+            dest: /root/hwreport.j2

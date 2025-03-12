@@ -1,0 +1,37 @@
+---
+- name: REPOS
+  hosts: all
+  tasks:
+    - name: EX294_BASE
+      ansible.builtin.yum_repository:
+        name: EX294_BASE
+        description: EX294 base software
+        file: external_repos4
+        baseurl: http://content.example.com/rhel9.0/x86_64/dvd/BaseOS
+        gpgcheck: yes
+
+    - name: Import a key from a url
+      ansible.builtin.rpm_key:
+        state: present
+        key: http://classroom.example.com/content/rhel9.0/x86_64/dvd/RPM-GPG-KEY-redhat-release
+
+
+
+    - name: EX294_STREAM
+      ansible.builtin.yum_repository:
+        name: EX294_STREAM
+        description: EX294 stream software
+        file: external_repos4
+        baseurl:  http://content.example.com/rhel9.0/x86_64/dvd/AppStream 
+        gpgcheck: yes
+
+    - name: Import a key from a url
+      ansible.builtin.rpm_key:
+        state: present
+        key: http://classroom.example.com/content/rhel9.0/x86_64/dvd/RPM-GPG-KEY-redhat-release
+        
+
+
+
+
+

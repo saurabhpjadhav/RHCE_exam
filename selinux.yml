@@ -1,0 +1,9 @@
+---
+- name: selinux.yml
+  hosts: all
+  vars:
+    - selinux_policy: targeted
+      selinux_state: enforcing
+  roles:
+    - role: redhat.rhel_system_roles.selinux
+  become: true
